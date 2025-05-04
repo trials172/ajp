@@ -1,0 +1,135 @@
+package three;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.*;
+
+public class StudentMark extends JFrame {
+
+    // UI Components
+    private JTextField tfName, tfJava, tfDataStruct, tfSysProg, tfOOP;
+    private JTextArea area;
+    private JButton btnReceipt, btnReset, btnPrint;
+
+    public StudentMark() {
+        setTitle("Student Marks System");
+        setSize(800, 700);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null); // Center the window
+        getContentPane().setBackground(Color.CYAN);
+        setLayout(null);
+
+        initializeComponents();
+        setVisible(true);
+    }
+
+    private void initializeComponents() {
+        // Labels
+        JLabel lblTitle = createLabel("Student Marks", 300, 30, 300, 30);
+        lblTitle.setFont(new Font("Arial", Font.BOLD, 20));
+        add(lblTitle);
+
+        add(createLabel("Name of the Student:", 50, 100, 200, 20));
+        tfName = createTextField(250, 100);
+
+        add(createLabel("Advanced Java:", 50, 150, 200, 20));
+        tfJava = createTextField(250, 150);
+
+        add(createLabel("Data Structure:", 50, 200, 200, 20));
+        tfDataStruct = createTextField(250, 200);
+
+        add(createLabel("System Programming:", 50, 250, 200, 20));
+        tfSysProg = createTextField(250, 250);
+
+        add(createLabel("Object-Oriented Programming:", 50, 300, 250, 20));
+        tfOOP = createTextField(250, 300);
+
+        // Buttons
+        btnReceipt = createButton("Generate Receipt", 100, 370);
+        btnReset = createButton("Reset", 300, 370);
+        btnPrint = createButton("Print", 500, 370);
+
+        add(btnReceipt);
+        add(btnReset);
+        add(btnPrint);
+
+        // Text Area with Scroll Pane
+        area = new JTextArea();
+        area.setFont(new Font("Monospaced", Font.PLAIN, 12));
+        area.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(area);
+        scrollPane.setBounds(100, 420, 600, 200);
+        add(scrollPane);
+
+        // Action Listeners
+        btnReset.addActionListener(e -> resetFields());
+        btnPrint.addActionListener(e -> printReceipt());
+        btnReceipt.addActionListener(e -> generateReceipt());
+    }
+
+    private JLabel createLabel(String text, int x, int y, int w, int h) {
+        JLabel label = new JLabel(text);
+        label.setBounds(x, y, w, h);
+        return label;
+    }
+
+    private JTextField createTextField(int x, int y) {
+        JTextField tf = new JTextField();
+        tf.setBounds(x, y, 250, 25);
+        add(tf);
+        return tf;
+    }
+
+    private JButton createButton(String text, int x, int y) {
+        JButton button = new JButton(text);
+        button.setBounds(x, y, 150, 30);
+        return button;
+    }
+
+    private void resetFields() {
+        tfName.setText("");
+        tfJava.setText("");
+        tfDataStruct.setText("");
+        tfSysProg.setText("");
+        tfOOP.setText("");
+        area.setText("");
+    }
+
+    private void printReceipt() {
+        try {
+            area.print();
+        } catch (java.awt.print.PrinterException e) {
+            JOptionPane.showMessageDialog(this, "Printer error: " + e.getMessage(), "Print Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void generateReceipt() {
+        String receiptText = String.format(
+                "-------------------------------------\n" +
+                "----------- Student Report ----------\n" +
+                "-------------------------------------\n" +
+                "Name: %s\n" +
+                "Advanced Java: %s\n" +
+                "Data Structure: %s\n" +
+                "System Programming: %s\n" +
+                "OOP: %s\n",
+                tfName.getText(), tfJava.getText(), tfDataStruct.getText(), tfSysProg.getText(), tfOOP.getText()
+        );
+
+        area.setText(receiptText);
+        saveReceiptToFile(receiptText);
+        JOptionPane.showMessageDialog(this, "Receipt saved to file.", "Success", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void saveReceiptToFile(String text) {
+        try (FileWriter writer = new FileWriter("java.txt", true)) {
+            writer.write(text + "\n");
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error saving file: " + e.getMessage(), "File Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(StudentMark::new);
+    }
+}
