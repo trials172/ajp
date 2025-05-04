@@ -1,0 +1,73 @@
+package four;
+import java.sql.*;
+
+public class JDBCInsert {
+
+    public static void main(String[] args) {
+        String url = "jdbc:mysql://localhost:3306/StudentDB";
+        String user = "root";   
+        String password = "root";  
+
+        Connection conn = null;
+        PreparedStatement insertStmt = null;
+        Statement selectStmt = null;
+        ResultSet resultSet = null;
+
+        try {
+            // 1. Load MySQL JDBC Driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            // 2. Establish connection
+            conn = DriverManager.getConnection(url, user, password);
+            System.out.println("Connected to database.");
+
+            // 3. Insert multiple records using batch
+            String insertSQL = "INSERT INTO Students (name, marks) VALUES (?, ?)";
+            insertStmt = conn.prepareStatement(insertSQL);
+
+            // Add records
+            String[][] students = {
+                {"Alice", "90"},
+                {"Bob", "85"},
+                {"Charlie", "78"},
+                {"Diana", "88"},
+                {"Ethan", "92"},
+                {"Fiona", "80"},
+                {"George", "76"}
+            };
+
+            for (String[] student : students) {
+                insertStmt.setString(1, student[0]);
+                insertStmt.setInt(2, Integer.parseInt(student[1]));
+                insertStmt.addBatch();
+            }
+
+            // Execute batch insert
+            insertStmt.executeBatch();
+            System.out.println("Multiple records inserted successfully.");
+
+            // 4. Retrieve data
+            String selectSQL = "SELECT * FROM Students";
+            selectStmt = conn.createStatement();
+            resultSet = selectStmt.executeQuery(selectSQL);
+
+            System.out.println("\n--- Student Records ---");
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                int marks = resultSet.getInt("marks");
+
+                System.out.printf("ID: %d, Name: %s, Marks: %d%n", id, name, marks);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // 5. Close resources
+            try { if (resultSet != null) resultSet.close(); } catch (Exception e) {}
+            try { if (insertStmt != null) insertStmt.close(); } catch (Exception e) {}
+            try { if (selectStmt != null) selectStmt.close(); } catch (Exception e) {}
+            try { if (conn != null) conn.close(); } catch (Exception e) {}
+        }
+    }
+}
