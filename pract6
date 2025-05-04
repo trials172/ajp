@@ -1,0 +1,33 @@
+package six;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
+public class InetAddressDemo {
+    public static void main(String[] args) {
+        try {
+            // Get the local host address
+            InetAddress localHost = InetAddress.getLocalHost();
+            System.out.println("Local Host:");
+            System.out.println("Host Name : " + localHost.getHostName());
+            System.out.println("IP Address: " + localHost.getHostAddress());
+            System.out.println();
+
+            // Get the IP address of a website using getByName()
+            InetAddress google = InetAddress.getByName("www.google.com");
+            System.out.println("Google Host:");
+            System.out.println("Host Name : " + google.getHostName());
+            System.out.println("IP Address: " + google.getHostAddress());
+            System.out.println();
+
+            // Get all IP addresses for a domain using getAllByName()
+            InetAddress[] addresses = InetAddress.getAllByName("www.google.com");
+            System.out.println("All IP addresses for www.google.com:");
+            for (InetAddress addr : addresses) {
+                System.out.println(addr);
+            }
+
+        } catch (UnknownHostException e) {
+            System.out.println("Host not found: " + e.getMessage());
+        }
+    }
+}
