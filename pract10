@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calculator App</title>
+</head>
+<body>
+    <form name="calculator">
+        <label>Enter First Number</label>
+        <input type="text" name="firstNumber"><br><br>
+
+        <label>Enter Second Number</label>
+        <input type="text" name="secondNumber"><br><br>
+
+        <label>Select an Operation</label>
+        <input type="radio" name="operation" value="add">ADDITION
+        <input type="radio" name="operation" value="subtract">SUBTRACTION
+        <input type="radio" name="operation" value="multiply">MULTIPLY
+        <input type="radio" name="operation" value="divide">DIVIDE<br><br>
+
+        <input type="reset" value="Reset">
+        <input type="button" value="Calculate" onclick="performOperation()">
+    </form>
+
+    <p id="result"></p>
+
+    <script>
+        function performOperation() {
+            var num1 = parseFloat(document.calculator.firstNumber.value);
+            var num2 = parseFloat(document.calculator.secondNumber.value);
+            var operation = document.querySelector('input[name="operation"]:checked').value;
+            var result = 0;
+
+            if (operation == "add") {
+                result = num1 + num2;
+            } else if (operation == "subtract") {
+                result = num1 - num2;
+            } else if (operation == "multiply") {
+                result = num1 * num2;
+            } else if (operation == "divide") {
+                result = num1 / num2;
+            }
+
+            document.getElementById("result").innerHTML = "Result: " + result;
+        }
+    </script>
+</body>
+</html>
