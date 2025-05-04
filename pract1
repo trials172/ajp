@@ -1,0 +1,36 @@
+package one;
+import java.applet.Applet;
+import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+public class KeyListenerEg extends Applet implements KeyListener {
+
+    String message = "Press any key...";
+
+    public void init() {
+        addKeyListener(this);  
+        requestFocus();   
+    }
+
+    public void paint(Graphics g) {
+        g.drawString(message, 50, 100);
+    }
+
+
+    public void keyPressed(KeyEvent ke) {
+        message = "Key Down (Pressed): " + KeyEvent.getKeyText(ke.getKeyCode());
+        repaint();
+    }
+
+
+    public void keyReleased(KeyEvent ke) {
+        message = "Key Up (Released): " + KeyEvent.getKeyText(ke.getKeyCode());
+        repaint();
+    }
+
+  
+    public void keyTyped(KeyEvent ke) {
+
+    }
+}
